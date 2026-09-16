@@ -183,11 +183,9 @@ print("Best CV Score:", grid.best_score_)
 # ==========================================
 # 10. SAVE BEST MODEL
 # ==========================================
-models_dir = os.path.join(os.path.dirname(__file__), "models")
-os.makedirs(models_dir, exist_ok=True)
-model_file = os.path.join(models_dir, "student_models.pkl")
-joblib.dump(grid.best_estimator_, model_file)
-print(f"Model successfully saved to {model_file}")
+joblib.dump(grid.best_estimator_, "models/student_model.pkl")
+
+print("Model saved successfully!")
 
 
 
