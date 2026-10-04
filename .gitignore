@@ -35,3 +35,7 @@ wheels/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Data files
+*.zip
+data/
