@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from pathlib import Path
 
 from dataset import train_loader, val_loader
 from model import CatDogCNN
@@ -77,3 +78,14 @@ for epoch in range(epochs):
         f"Loss: {running_loss / len(train_loader):.4f} "
         f"Accuracy: {train_accuracy:.2f}%"
     )
+
+
+# 7. Save trained model
+Path("models").mkdir(exist_ok=True)
+
+torch.save(
+    model.state_dict(),
+    "models/cat_dog_cnn.pth"
+)
+
+print("Model saved successfully!")
