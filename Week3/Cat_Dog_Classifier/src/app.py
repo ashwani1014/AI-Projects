@@ -2,6 +2,7 @@ import streamlit as st
 import torch
 from PIL import Image
 from torchvision import transforms
+from pathlib import Path
 
 from model import CatDogCNN
 
@@ -100,17 +101,37 @@ device = torch.device(
 
 
 # =========================================================
-# 5. LOAD MODEL
+# 5. MODEL PATH
+# =========================================================
+
+MODEL_PATH = Path("models/cat_dog_cnn.pth")
+
+
+# =========================================================
+# 6. LOAD TRAINED MODEL
 # =========================================================
 
 @st.cache_resource
 def load_model():
 
+    path_to_load = None
+
+    # If app is run from project root
+    if MODEL_PATH.exists():
+        path_to_load = MODEL_PATH
+
+    # Backup path if app is run from src folder
+    elif Path("../models/cat_dog_cnn.pth").exists():
+        path_to_load = Path("../models/cat_dog_cnn.pth")
+
+    if path_to_load is None:
+        return None
+
     model = CatDogCNN()
 
     model.load_state_dict(
         torch.load(
-            "models/cat_dog_cnn.pth",
+            path_to_load,
             map_location=device
         )
     )
@@ -126,7 +147,26 @@ model = load_model()
 
 
 # =========================================================
-# 6. IMAGE PREPROCESSING
+# 7. CHECK MODEL
+# =========================================================
+
+if model is None:
+
+    st.error(
+        "⚠️ Model weights not found: "
+        "models/cat_dog_cnn.pth"
+    )
+
+    st.info(
+        "Please train the model first using: "
+        "python src/train.py"
+    )
+
+    st.stop()
+
+
+# =========================================================
+# 8. IMAGE PREPROCESSING
 # =========================================================
 
 transform = transforms.Compose([
@@ -143,7 +183,7 @@ transform = transforms.Compose([
 
 
 # =========================================================
-# 7. IMAGE UPLOADER
+# 9. IMAGE UPLOADER
 # =========================================================
 
 uploaded_file = st.file_uploader(
@@ -153,54 +193,76 @@ uploaded_file = st.file_uploader(
 
 
 # =========================================================
-# 8. PREDICTION
+# 10. PREDICTION
 # =========================================================
 
 if uploaded_file is not None:
 
+    # Open uploaded image
     image = Image.open(uploaded_file).convert("RGB")
 
+    # Display image
     st.image(
         image,
         caption="Uploaded Image",
-        use_container_width=True
+        width="stretch"
     )
 
     st.markdown("---")
 
-    if st.button("🔍 Predict Image", use_container_width=True):
+    # Predict button
+    if st.button(
+        "🔍 Predict Image",
+        width="stretch"
+    ):
 
-        with st.spinner("🤖 AI is analyzing the image..."):
+        with st.spinner(
+            "🤖 AI is analyzing the image..."
+        ):
 
+            # ---------------------------------------------
             # Preprocess image
+            # ---------------------------------------------
+
             image_tensor = transform(image)
 
             # Add batch dimension
             image_tensor = image_tensor.unsqueeze(0)
 
-            # Move to device
+            # Move image to CPU/GPU
             image_tensor = image_tensor.to(device)
 
-            # Model prediction
+
+            # ---------------------------------------------
+            # Model Prediction
+            # ---------------------------------------------
+
             with torch.no_grad():
 
                 outputs = model(image_tensor)
 
+                # Convert model scores into probabilities
                 probabilities = torch.softmax(
                     outputs,
                     dim=1
                 )
 
+                # Get highest probability
                 confidence, predicted = torch.max(
                     probabilities,
                     1
                 )
 
 
-            # Class names
+            # ---------------------------------------------
+            # Get Class
+            # ---------------------------------------------
+
             classes = ["Cat", "Dog"]
 
-            prediction = classes[predicted.item()]
+            prediction = classes[
+                predicted.item()
+            ]
 
             confidence_percentage = (
                 confidence.item() * 100
@@ -229,8 +291,10 @@ if uploaded_file is not None:
                 </div>
 
                 <div class="confidence">
-                    Confidence: 
-                    <strong>{confidence_percentage:.2f}%</strong>
+                    Confidence:
+                    <strong>
+                        {confidence_percentage:.2f}%
+                    </strong>
                 </div>
 
             </div>
@@ -240,7 +304,7 @@ if uploaded_file is not None:
 
 
 # =========================================================
-# 9. FOOTER
+# 11. FOOTER
 # =========================================================
 
 st.markdown(
