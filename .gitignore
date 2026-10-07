@@ -39,3 +39,8 @@ Thumbs.db
 # Data files
 *.zip
 data/
+
+# Model weights
+*.pth
+*.pt
+models/
