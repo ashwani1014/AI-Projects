@@ -54,6 +54,33 @@ Built a complete end-to-end classification system to predict student outcomes ba
 
 ---
 
+### ✅ Week 3 — Deep Learning, Computer Vision & CNNs
+
+**Concepts Learned:**
+- Deep Learning & Neural Network Fundamentals
+- Computer Vision Basics & Image Data Pipelines
+- Convolutional Neural Networks (CNNs):
+  - Convolutional Layers (`Conv2d`) & Feature Maps
+  - Activation Functions (`ReLU`)
+  - Downsampling & Spatial Pooling (`MaxPool2d`)
+  - Feature Flattening & Dense Classification Heads (`Linear`)
+- Image Preprocessing & Data Augmentation with `torchvision.transforms`:
+  - Resizing, Random Horizontal Flips, Random Rotations, ImageNet Normalization
+- PyTorch Framework Essentials:
+  - `ImageFolder` & Custom Data Loaders (`DataLoader`)
+  - End-to-End Training Loops, Cross-Entropy Loss (`CrossEntropyLoss`), and Adam Optimizer
+  - Model Evaluation, Testing Accuracy & State Dictionary Serialization (`.pth`)
+- Production UI & Model Serving:
+  - Interactive Web App with Streamlit featuring Obsidian Glassmorphism Styling & Real-Time Softmax Confidence Metrics
+
+#### 🐾 Project — VisionAI: Cat vs Dog Neural Classifier
+Built an end-to-end computer vision binary classifier using PyTorch to accurately classify cat and dog images.
+- **Architecture:** 2 Convolutional Blocks (`Conv2d` + `ReLU` + `MaxPool2d`) followed by a Fully Connected classifier head (`Linear` + `ReLU` + `Linear`).
+- **Workflow:** Image Data Integrity Verification ➔ Train/Val/Test Splitting ➔ Data Augmentation ➔ CNN Model Training (CrossEntropy + Adam) ➔ Evaluation ➔ Streamlit Obsidian Dark UI with Real-time Softmax Confidence Metrics.
+- **Tools Used:** Python, PyTorch, Torchvision, PIL, Streamlit.
+
+---
+
 ## 📂 Repository Structure
 
 ```text
@@ -73,6 +100,19 @@ AI-Projects/
 │   │   └── README.MD
 │   ├── Machine_Learning_House_Price_Prediction.ipynb
 │   └── Tune_with_CV.ipynb
+├── Week3/
+│   └── Cat_Dog_Classifier/
+│       ├── src/
+│       │   ├── app.py
+│       │   ├── dataset.py
+│       │   ├── image.py
+│       │   ├── model.py
+│       │   ├── split_dataset.py
+│       │   ├── test.py
+│       │   └── train.py
+│       ├── clean_images.py
+│       ├── requirements.txt
+│       └── README.md
 ├── .gitignore
 └── README.md
 ```
@@ -83,5 +123,6 @@ AI-Projects/
 - **Language:** Python 3.x
 - **Data Science:** NumPy, Pandas, Scipy
 - **Machine Learning:** Scikit-Learn
+- **Deep Learning & Computer Vision:** PyTorch, Torchvision, Pillow
 - **Visualization:** Matplotlib, Seaborn
 - **Deployment & UI:** Streamlit
