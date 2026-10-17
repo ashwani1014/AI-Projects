@@ -26,6 +26,25 @@ wheels/
 .installed.cfg
 *.egg
 
+# Node & Web Build Artifacts
+node_modules/
+.next/
+out/
+dist/
+.cache/
+next-env.d.ts
+
+# Environment variables & secrets
+.env
+.env*.local
+.env.development
+.env.test
+.env.production
+!.env.example
+
+# Devin & Agent cache
+.devin/
+
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
